@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wish Plaque – Pitch Deck</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: #0a0302;
+    color: #f0e8e0;
+  }
+
+  .slide {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 80px;
+    border-bottom: 1px solid #2a1008;
+    position: relative;
+    page-break-after: always;
+  }
+
+  /* ── accent line ── */
+  .slide::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0;
+    width: 6px; height: 100%;
+    background: #d02608;
+  }
+
+  /* ── slide number ── */
+  .slide-num {
+    position: absolute;
+    bottom: 28px; right: 40px;
+    font-size: 12px;
+    color: #6b3020;
+    font-family: monospace;
+    letter-spacing: 2px;
+  }
+
+  /* ── typography ── */
+  h1 { font-size: 52px; line-height: 1.15; color: #f5ddd0; }
+  h2 { font-size: 34px; color: #d02608; margin-bottom: 32px; font-style: italic; }
+  h3 { font-size: 22px; color: #e86030; margin-bottom: 12px; }
+  p  { font-size: 18px; line-height: 1.8; color: #d8c8bc; max-width: 820px; }
+  .sub { font-size: 20px; color: #a07060; margin-top: 14px; font-style: italic; }
+  .en { color: #d8c8bc; }
+  .zh { color: #a09088; font-size: 16px; margin-top: 6px; }
+  .tag {
+    display: inline-block;
+    background: #2a0a04;
+    border: 1px solid #d02608;
+    color: #e86030;
+    font-size: 13px;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin: 4px;
+    font-family: monospace;
+  }
+  .divider {
+    width: 60px; height: 3px;
+    background: #d02608;
+    margin: 24px 0;
+  }
+  .quote {
+    font-size: 28px;
+    font-style: italic;
+    color: #f0c080;
+    border-left: 4px solid #d02608;
+    padding-left: 28px;
+    margin: 24px 0;
+    line-height: 1.6;
+    max-width: 760px;
+  }
+  .quote-zh {
+    font-size: 18px;
+    color: #a08060;
+    padding-left: 32px;
+    margin-top: 8px;
+  }
+
+  /* ── grid ── */
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    width: 100%;
+    max-width: 900px;
+    margin-top: 16px;
+  }
+  .grid-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 28px;
+    width: 100%;
+    max-width: 960px;
+    margin-top: 16px;
+  }
+  .card {
+    background: #150704;
+    border: 1px solid #3a1208;
+    border-radius: 10px;
+    padding: 28px 24px;
+  }
+  .card h3 { font-size: 18px; }
+  .card p  { font-size: 15px; }
+
+  /* ── cover ── */
+  .cover { background: #080201; }
+  .cover h1 { font-size: 64px; letter-spacing: 2px; }
+  .cover .logo {
+    font-size: 80px;
+    margin-bottom: 20px;
+  }
+  .cover .tagline {
+    font-size: 22px;
+    color: #f0c080;
+    margin-top: 20px;
+    font-style: italic;
+  }
+  .cover .tagline-zh {
+    font-size: 16px;
+    color: #806040;
+    margin-top: 8px;
+  }
+  .badge {
+    margin-top: 40px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  /* ── tech stack ── */
+  .tech-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  /* ── full-width text ── */
+  .text-block {
+    max-width: 840px;
+    width: 100%;
+  }
+  .text-block + .text-block { margin-top: 32px; }
+
+  /* ── feature list ── */
+  .feat-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .feat-icon {
+    font-size: 28px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  @media print {
+    .slide { page-break-after: always; min-height: 100vh; }
+    body { background: #0a0302; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SLIDE 1 · COVER                          -->
+<!-- ══════════════════════════════════════════ -->
+<div class="slide cover">
+  <div class="logo">⛩️</div>
+  <h1>Wish Plaque</h1>
+  <p class="tagline">An On-Chain Shrine Wishing Wall, Native on Android</p>
+  <p class="tagline-zh">链上神社许愿墙 · Android 原生应用</p>
+  <div class="badge">
+    <span class="tag">Solana Mobile Stack</span>
+    <span class="tag">Mobile Wallet Adapter v2</span>
+    <span class="tag">Anchor · Devnet</span>
+    <span class="tag">React Native · Expo</span>
+  </div>
+  <span class="slide-num">01 / 08</span>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SLIDE 2 · THE BELIEF                     -->
+<!-- ══════════════════════════════════════════ -->
+<div class="slide">
+  <h2>The Belief &nbsp;·&nbsp; 我们的信念</h2>
+  <div class="divider"></div>
+  <div class="quote">
+    "Sharing pain halves it.<br>Sharing joy doubles it."
+  </div>
+  <p class="quote-zh">「痛苦分享可以减半，快乐分享就会加倍。」</p>
+  <div class="divider"></div>
+  <div class="text-block" style="margin-top:8px;">
+    <p class="en">When we express our struggles, the burden lightens. When we share our joy, it grows. This emotional truth is the foundation of Wish Plaque.</p>
+    <p class="zh">当我们倾诉困难，心理负担得以分担；当我们分享快乐，那份喜悦会被放大。这是 Wish Plaque 最根本的信念。</p>
+  </div>
+  <span class="slide-num">02 / 08</span>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SLIDE 3 · THE INSPIRATION                -->
+<!-- ══════════════════════════════════════════ -->
+<div class="slide">
+  <h2>Inspiration &nbsp;·&nbsp; 灵感来源</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>⛩️ Ancient Tradition</h3>
+      <p class="en">In Japan, people visit shrines and write wishes on wooden plaques called <em>ema</em> — a tradition spanning over 1,000 years.</p>
+      <p class="zh" style="margin-top:10px;">在日本，人们前往神社，将愿望写在称为「绘马」的木牌上——这一传统延续了逾千年。</p>
+    </div>
+    <div class="card">
+      <h3>⛓️ On-Chain Forever</h3>
+      <p class="en">Your wish is no longer just words in the wind. On Solana, it becomes a permanent, immutable account — witnessed by the world.</p>
+      <p class="zh" style="margin-top:10px;">你的愿望不再只是随风而逝的话语。在 Solana 上，它成为永久、不可篡改的账户——被全世界见证。</p>
+    </div>
+  </div>
+  <span class="slide-num">03 / 08</span>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SLIDE 4 · WHAT IS WISH PLAQUE            -->
+<!-- ══════════════════════════════════════════ -->
+<div class="slide">
+  <h2>What is Wish Plaque? &nbsp;·&nbsp; 这是什么？</h2>
+  <div class="divider"></div>
+  <div class="text-block">
+    <p class="en">Wish Plaque is a <strong style="color:#e86030">native Android app</strong> that lets anyone post a wish permanently on the Solana blockchain, browse wishes from people around the world, and feel the quiet power of being witnessed.</p>
+    <p class="zh" style="margin-top:12px;">Wish Plaque 是一款 Android 原生应用，让任何人都能将心愿永久写入 Solana 区块链，浏览来自世界各地陌生人的愿望，感受被见证的力量。</p>
+  </div>
+  <div class="divider"></div>
+  <div class="feat-item">
+    <span class="feat-icon">🏛️</span>
+    <div><h3>Shrine Page · 神社</h3><p class="en">Browse all wishes posted on-chain by everyone, in real time.</p><p class="zh">实时浏览所有人在链上许下的愿望。</p></div>
+  </div>
+  <div class="feat-item">
+    <span class="feat-icon">✍️</span>
+    <div><h3>Make a Wish · 许愿</h3><p class="en">Write your wish, sign with your wallet via MWA, and publish to Solana in seconds.</p><p class="zh">写下愿望，通过 MWA 用钱包签名，几秒内上链。</p></div>
+  </div>
+  <div class="feat-item">
+    <span class="feat-icon">🪬</span>
+    <div><h3>My Wishes · 我的</h3><p class="en">View all wishes you have ever made — your personal on-chain journal.</p><p class="zh">查看你所有已许下的愿望——你在链上的个人记录。</p></div>
+  </div>
+  <span class="slide-num">04 / 08</span>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SLIDE 5 · TECHNICAL ARCHITECTURE         -->
+<!-- ══════════════════════════════════════════ -->
+<div class="slide">
+  <h2>Technical Architecture &nbsp;·&nbsp; 技术架构</h2>
+  <div class="divider"></div>
+  <div class="grid-3">
+    <div class="card">
+      <h3>📱 Mobile-First</h3>
+      <p class="en">React Native + Expo. Full native Android build. Real APK — no PWA, no web wrapper.</p>
+      <p class="zh" style="margin-top:8px;">React Native + Expo，完整原生 Android 构建，真实 APK。</p>
+    </div>
+    <div class="card">
+      <h3>🔑 MWA v2</h3>
+      <p class="en">Mobile Wallet Adapter v2 for wallet authorization, reauthorize flow, and <code>signAndSendTransactions</code>.</p>
+      <p class="zh" style="margin-top:8px;">MWA v2 实现授权、reauthorize 与交易签名，全程不离 App。</p>
+    </div>
+    <div class="card">
+      <h3>⚓ Anchor Program</h3>
+      <p class="en">Each wish is a standalone PDA account on Solana Devnet. Data fetched via deterministic PDA derivation — no third-party indexers.</p>
+      <p class="zh" style="margin-top:8px;">每个愿望是独立的 PDA 账户，通过确定性 PDA 派生读取数据。</p>
+    </div>
+  </div>
+  <div class="tech-row" style="margin-top:32px;">
+    <span class="tag">Solana Mobile Stack</span>
+    <span class="tag">Mobile Wallet Adapter v2</span>
+    <span class="tag">Anchor 0.32</span>
+    <span class="tag">@solana/web3.js</span>
+    <span class="tag">React Native 0.81</span>
+    <span class="tag">Expo 54</span>
+    <span class="tag">Hermes Engine</span>
+    <span class="tag">TypeScript</span>
+  </div>
+  <span class="slide-num">05 / 08</span>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SLIDE 6 · BIGGEST CHALLENGE              -->
+<!-- ══════════════════════════════════════════ -->
+<div class="slide">
+  <h2>Biggest Challenge &nbsp;·&nbsp; 最大挑战</h2>
+  <div class="divider"></div>
+  <div class="grid-2">
+    <div class="card">
+      <h3>🔥 Silent Transaction Failures</h3>
+      <p class="en">Using <code>signTransactions()</code> + manual serialization + <code>sendRawTransaction()</code> failed silently in Hermes — wallet confirmed, nothing landed on-chain. Fix: delegate everything to <code>signAndSendTransactions()</code> + MWA <code>reauthorize</code> flow.</p>
+      <p class="zh" style="margin-top:10px;">常规签名方式在 Hermes 引擎中静默失败——钱包确认，但链上无记录。改用 <code>signAndSendTransactions()</code> 配合 reauthorize 解决。</p>
+    </div>
+    <div class="card">
+      <h3>🔧 Borsh Without BorshCoder</h3>
+      <p class="en">Anchor's <code>BorshCoder</code> is incompatible with Hermes. We wrote manual byte-level Borsh deserialization from scratch to parse on-chain account data reliably.</p>
+      <p class="zh" style="margin-top:10px;">Anchor 的 BorshCoder 与 Hermes 不兼容，需从零手写字节级 Borsh 反序列化逻辑才能正确解析链上账户数据。</p>
+    </div>
+  </div>
+  <span class="slide-num">06 / 08</span>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SLIDE 7 · WHY SEEKER                     -->
+<!-- ══════════════════════════════════════════ -->
+<div class="slide">
+  <h2>Why Seeker Users Will Love It &nbsp;·&nbsp; 为什么 Seeker 用户会喜欢</h2>
+  <div class="divider"></div>
+  <div class="text-block">
+    <p class="en">Seeker is built for people who live at the intersection of mobile and Web3. Wish Plaque gives them something <strong style="color:#e86030">meaningful</strong> to do on-chain — beyond trading.</p>
+    <p class="zh" style="margin-top:10px;">Seeker 用户生活在移动端与 Web3 的交汇处。Wish Plaque 为他们提供了一种超越交易的有意义的链上体验。</p>
+  </div>
+  <div class="divider"></div>
+  <div class="feat-item">
+    <span class="feat-icon">⚡</span>
+    <div><p class="en">One biometric tap via MWA — wish posted on-chain in seconds. Zero friction, fully native.</p><p class="zh">一次指纹确认，愿望即刻上链。零摩擦，完全原生。</p></div>
+  </div>
+  <div class="feat-item">
+    <span class="feat-icon">🌏</span>
+    <div><p class="en">A shared space to post wishes, find resonance with strangers, and feel the quiet power of being witnessed by the world.</p><p class="zh">一个发布愿望、与陌生人产生共鸣、感受被世界见证的共享空间。</p></div>
+  </div>
+  <div class="feat-item">
+    <span class="feat-icon">♾️</span>
+    <div><p class="en">Your words don't disappear. Permanently on-chain — a digital plaque that outlasts any social platform.</p><p class="zh">你的话语不会消失。永久上链——一块超越任何社交平台的数字铭牌。</p></div>
+  </div>
+  <span class="slide-num">07 / 08</span>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- SLIDE 8 · VISION & CLOSING               -->
+<!-- ══════════════════════════════════════════ -->
+<div class="slide">
+  <h2>What's Next &nbsp;·&nbsp; 未来规划</h2>
+  <div class="divider"></div>
+  <div class="grid-3" style="margin-bottom:40px;">
+    <div class="card">
+      <h3>💰 Wish Donations</h3>
+      <p class="en">Let users support each other's wishes with SOL — turning empathy into action.</p>
+      <p class="zh" style="margin-top:8px;">让用户用 SOL 助力他人的愿望，让共情化为行动。</p>
+    </div>
+    <div class="card">
+      <h3>🖼️ NFT Plaques</h3>
+      <p class="en">Mint fulfilled wishes as NFT wooden plaques — a permanent keepsake on-chain.</p>
+      <p class="zh" style="margin-top:8px;">将实现的愿望铸造为 NFT 绘马，永久珍藏。</p>
+    </div>
+    <div class="card">
+      <h3>🤝 Social Layer</h3>
+      <p class="en">React to wishes, build connections — a Web3-native emotional social graph.</p>
+      <p class="zh" style="margin-top:8px;">对愿望作出回应，建立连接——Web3 原生的情感社交网络。</p>
+    </div>
+  </div>
+  <div class="quote" style="font-size:22px; margin-top:0;">
+    "We can't eliminate the hardships in life —<br>but we don't have to carry them alone."
+  </div>
+  <p class="quote-zh">「我们无法消除人生中的困难，但我们可以选择不独自承受。」</p>
+  <span class="slide-num">08 / 08</span>
+</div>
+
+</body>
+</html>

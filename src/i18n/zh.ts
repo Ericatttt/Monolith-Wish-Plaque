@@ -1,0 +1,116 @@
+const zh = {
+  nav: {
+    home: '神社',
+    createWish: '许愿',
+    myWishes: '我的',
+  },
+
+  home: {
+    title: '神社许愿板',
+    subtitle: '这是所有人的愿望',
+    loading: '加载中...',
+    empty: '还没有愿望',
+    emptySubtitle: '成为第一个许愿的人吧！',
+    donationModal: {
+      title: '💰 助力愿望',
+      wisher: '许愿人',
+      amountLabel: '捐赠金额 (SOL)',
+      cancel: '取消',
+      confirm: '确认捐赠',
+    },
+    alerts: {
+      noWallet: '提示',
+      noWalletMsg: '请先连接钱包',
+      invalidAmount: '错误',
+      invalidAmountMsg: '请输入有效的捐赠金额',
+      successTitle: '成功',
+      successMsg: '捐赠成功！\n交易签名: ',
+      errorTitle: '错误',
+      defaultError: '捐赠失败',
+    },
+  },
+
+  create: {
+    headerTitle: '写下你的心愿',
+    headerSubtitle: '让它永存于区块链上',
+    connectTitle: '需要连接钱包',
+    connectSubtitle: '连接您的 Solana 钱包以开始许愿',
+    connectButton: '连接钱包',
+    contentLabel: '心愿内容',
+    contentPlaceholder: '写下你的心愿...',
+    nicknameLabel: '署名昵称',
+    nicknamePlaceholder: '你的昵称',
+    dateLabel: '日期',
+    walletLabel: '已连接钱包:',
+    submitButton: '🙏 许愿',
+    submitSubtext: '(约需 0.01-0.02 SOL)',
+    notice: '💡 提示: 愿望将永久存储在 Solana 区块链上，无法删除或修改内容。但您可以在"我的愿望"中标记愿望是否实现。',
+    alerts: {
+      noWallet: '提示',
+      noWalletMsg: '请先连接钱包',
+      noContent: '错误',
+      noContentMsg: '请输入心愿内容',
+      noNickname: '错误',
+      noNicknameMsg: '请输入署名昵称',
+      contentTooLong: '错误',
+      contentTooLongMsg: '心愿内容不能超过{{max}}个字符',
+      nicknameTooLong: '错误',
+      nicknameTooLongMsg: '昵称不能超过{{max}}个字符',
+      successTitle: '成功',
+      successMsg: '愿望已创建！\n\n交易签名: {{sig}}...\n\n您的愿望将在确认后显示在神社许愿板上。',
+      successConfirm: '好的',
+      errorTitle: '错误',
+      defaultError: '创建愿望失败',
+    },
+  },
+
+  myWishes: {
+    title: '我的愿望',
+    subtitle: '共 {{count}} 个愿望',
+    loading: '加载中...',
+    connectTitle: '需要连接钱包',
+    connectSubtitle: '连接您的钱包以查看您的愿望',
+    connectButton: '连接钱包',
+    empty: '还没有愿望',
+    emptySubtitle: '去许愿界面写下你的第一个心愿吧！',
+    statusModal: {
+      title: '🙏 还愿',
+      wishId: '愿望 #{{id}}',
+      question: '这个愿望实现了吗？',
+      fulfilled: '愿望实现',
+      fulfilledSub: '(变绿色)',
+      unfulfilled: '事与愿违',
+      unfulfilledSub: '(保持黄色)',
+      cancel: '取消',
+    },
+    alerts: {
+      onlyPending: '提示',
+      onlyPendingMsg: '只有待实现的愿望可以还愿',
+      successTitle: '成功',
+      successFulfilled: '已实现',
+      successUnfulfilled: '未实现',
+      successMsg: '愿望已标记为{{status}}\n交易签名: ',
+      errorTitle: '错误',
+      defaultError: '更新状态失败',
+    },
+  },
+
+  wishCard: {
+    donationLabel: '收到捐赠:',
+    supportButton: '💰 助力',
+    wishId: '愿望 #{{id}}',
+  },
+
+  status: {
+    pending: '待实现',
+    fulfilled: '已实现',
+    unfulfilled: '未实现',
+  },
+
+  lang: {
+    switchToEn: 'EN',
+    switchToZh: '中',
+  },
+} as const;
+
+export default zh;

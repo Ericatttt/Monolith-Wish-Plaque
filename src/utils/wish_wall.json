@@ -1,0 +1,443 @@
+{
+  "address": "HXP5UvapL8Pv9P1vY7LYhAMv2VcbJZnn7zhfRJ9Eb8Bv",
+  "metadata": {
+    "name": "wish_wall",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "create_wish",
+      "docs": [
+        "Create a new wish",
+        "Note: NFT minting will be added in a future update"
+      ],
+      "discriminator": [
+        47,
+        64,
+        159,
+        45,
+        95,
+        19,
+        61,
+        165
+      ],
+      "accounts": [
+        {
+          "name": "state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119,
+                  105,
+                  115,
+                  104,
+                  45,
+                  119,
+                  97,
+                  108,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "wish",
+          "writable": true
+        },
+        {
+          "name": "owner",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "content",
+          "type": "string"
+        },
+        {
+          "name": "nickname",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "name": "donate_to_wish",
+      "docs": [
+        "Donate SOL to support a wish"
+      ],
+      "discriminator": [
+        214,
+        30,
+        39,
+        19,
+        82,
+        94,
+        204,
+        106
+      ],
+      "accounts": [
+        {
+          "name": "wish",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119,
+                  105,
+                  115,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "wish.wish_id",
+                "account": "Wish"
+              }
+            ]
+          }
+        },
+        {
+          "name": "donor",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "wish_owner",
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initialize",
+      "docs": [
+        "Initialize the wish wall program",
+        "Creates the global state account"
+      ],
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "state",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119,
+                  105,
+                  115,
+                  104,
+                  45,
+                  119,
+                  97,
+                  108,
+                  108,
+                  45,
+                  115,
+                  116,
+                  97,
+                  116,
+                  101
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_wish_status",
+      "docs": [
+        "Update the status of a wish (for fulfillment)"
+      ],
+      "discriminator": [
+        112,
+        35,
+        2,
+        99,
+        119,
+        226,
+        112,
+        55
+      ],
+      "accounts": [
+        {
+          "name": "wish",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  119,
+                  105,
+                  115,
+                  104
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "wish.wish_id",
+                "account": "Wish"
+              }
+            ]
+          }
+        },
+        {
+          "name": "owner",
+          "signer": true
+        }
+      ],
+      "args": [
+        {
+          "name": "new_status",
+          "type": {
+            "defined": {
+              "name": "WishStatus"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Wish",
+      "discriminator": [
+        19,
+        93,
+        74,
+        238,
+        190,
+        158,
+        94,
+        132
+      ]
+    },
+    {
+      "name": "WishWallState",
+      "discriminator": [
+        10,
+        155,
+        37,
+        71,
+        182,
+        105,
+        61,
+        33
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "ContentTooLong",
+      "msg": "Content exceeds maximum length of 500 characters"
+    },
+    {
+      "code": 6001,
+      "name": "NicknameTooLong",
+      "msg": "Nickname exceeds maximum length of 50 characters"
+    },
+    {
+      "code": 6002,
+      "name": "UnauthorizedStatusUpdate",
+      "msg": "Only the wish owner can update the wish status"
+    },
+    {
+      "code": 6003,
+      "name": "InvalidDonationAmount",
+      "msg": "Invalid donation amount"
+    },
+    {
+      "code": 6004,
+      "name": "EmptyContent",
+      "msg": "Content cannot be empty"
+    },
+    {
+      "code": 6005,
+      "name": "EmptyNickname",
+      "msg": "Nickname cannot be empty"
+    }
+  ],
+  "types": [
+    {
+      "name": "Wish",
+      "docs": [
+        "Individual wish account"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "docs": [
+              "Owner of the wish (wallet address)"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "wish_id",
+            "docs": [
+              "Unique wish ID"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "content",
+            "docs": [
+              "Wish content (max 500 characters)"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "nickname",
+            "docs": [
+              "Nickname of the wisher (max 50 characters)"
+            ],
+            "type": "string"
+          },
+          {
+            "name": "created_at",
+            "docs": [
+              "Creation timestamp (Unix timestamp)"
+            ],
+            "type": "i64"
+          },
+          {
+            "name": "status",
+            "docs": [
+              "Current status of the wish"
+            ],
+            "type": {
+              "defined": {
+                "name": "WishStatus"
+              }
+            }
+          },
+          {
+            "name": "nft_mint",
+            "docs": [
+              "NFT mint address"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "total_donations",
+            "docs": [
+              "Total donations received (in lamports)"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump seed"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WishStatus",
+      "docs": [
+        "Status of a wish"
+      ],
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "Pending"
+          },
+          {
+            "name": "Fulfilled"
+          },
+          {
+            "name": "Unfulfilled"
+          }
+        ]
+      }
+    },
+    {
+      "name": "WishWallState",
+      "docs": [
+        "Global state for the wish wall program"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "authority",
+            "docs": [
+              "Program authority (admin)"
+            ],
+            "type": "pubkey"
+          },
+          {
+            "name": "total_wishes",
+            "docs": [
+              "Total number of wishes created"
+            ],
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "docs": [
+              "PDA bump seed"
+            ],
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ]
+}

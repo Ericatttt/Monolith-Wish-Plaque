@@ -1,0 +1,116 @@
+const en = {
+  nav: {
+    home: 'Shrine',
+    createWish: 'Make a Wish',
+    myWishes: 'My Wishes',
+  },
+
+  home: {
+    title: 'Shrine Wish Plaque',
+    subtitle: 'Wishes from everyone',
+    loading: 'Loading...',
+    empty: 'No wishes yet',
+    emptySubtitle: 'Be the first to make a wish!',
+    donationModal: {
+      title: '💰 Support Wish',
+      wisher: 'Wisher',
+      amountLabel: 'Amount (SOL)',
+      cancel: 'Cancel',
+      confirm: 'Confirm Donation',
+    },
+    alerts: {
+      noWallet: 'Notice',
+      noWalletMsg: 'Please connect your wallet first',
+      invalidAmount: 'Error',
+      invalidAmountMsg: 'Please enter a valid donation amount',
+      successTitle: 'Success',
+      successMsg: 'Donation successful!\nTx: ',
+      errorTitle: 'Error',
+      defaultError: 'Donation failed',
+    },
+  },
+
+  create: {
+    headerTitle: 'Write Your Wish',
+    headerSubtitle: 'Stored forever on the blockchain',
+    connectTitle: 'Wallet Required',
+    connectSubtitle: 'Connect your Solana wallet to make a wish',
+    connectButton: 'Connect Wallet',
+    contentLabel: 'Wish Content',
+    contentPlaceholder: 'Write your wish...',
+    nicknameLabel: 'Nickname',
+    nicknamePlaceholder: 'Your nickname',
+    dateLabel: 'Date',
+    walletLabel: 'Connected Wallet:',
+    submitButton: '🙏 Make Wish',
+    submitSubtext: '(~0.01-0.02 SOL)',
+    notice: '💡 Note: Wishes are permanently stored on Solana blockchain and cannot be deleted or modified. You can mark wish status in "My Wishes".',
+    alerts: {
+      noWallet: 'Notice',
+      noWalletMsg: 'Please connect your wallet first',
+      noContent: 'Error',
+      noContentMsg: 'Please enter wish content',
+      noNickname: 'Error',
+      noNicknameMsg: 'Please enter a nickname',
+      contentTooLong: 'Error',
+      contentTooLongMsg: 'Wish content cannot exceed {{max}} characters',
+      nicknameTooLong: 'Error',
+      nicknameTooLongMsg: 'Nickname cannot exceed {{max}} characters',
+      successTitle: 'Success',
+      successMsg: 'Wish created!\n\nTx: {{sig}}...\n\nYour wish will appear on the Shrine board after confirmation.',
+      successConfirm: 'OK',
+      errorTitle: 'Error',
+      defaultError: 'Failed to create wish',
+    },
+  },
+
+  myWishes: {
+    title: 'My Wishes',
+    subtitle: '{{count}} Wish(es)',
+    loading: 'Loading...',
+    connectTitle: 'Wallet Required',
+    connectSubtitle: 'Connect your wallet to view your wishes',
+    connectButton: 'Connect Wallet',
+    empty: 'No wishes yet',
+    emptySubtitle: 'Go make your first wish!',
+    statusModal: {
+      title: '🙏 Fulfill Wish',
+      wishId: 'Wish #{{id}}',
+      question: 'Was this wish fulfilled?',
+      fulfilled: 'Wish Fulfilled',
+      fulfilledSub: '(turns green)',
+      unfulfilled: 'Not Fulfilled',
+      unfulfilledSub: '(stays yellow)',
+      cancel: 'Cancel',
+    },
+    alerts: {
+      onlyPending: 'Notice',
+      onlyPendingMsg: 'Only pending wishes can be updated',
+      successTitle: 'Success',
+      successFulfilled: 'Fulfilled',
+      successUnfulfilled: 'Unfulfilled',
+      successMsg: 'Wish marked as {{status}}\nTx: ',
+      errorTitle: 'Error',
+      defaultError: 'Failed to update status',
+    },
+  },
+
+  wishCard: {
+    donationLabel: 'Received:',
+    supportButton: '💰 Support',
+    wishId: 'Wish #{{id}}',
+  },
+
+  status: {
+    pending: 'Pending',
+    fulfilled: 'Fulfilled',
+    unfulfilled: 'Unfulfilled',
+  },
+
+  lang: {
+    switchToEn: 'EN',
+    switchToZh: '中',
+  },
+} as const;
+
+export default en;
