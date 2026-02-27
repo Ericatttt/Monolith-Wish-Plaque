@@ -1,228 +1,166 @@
-# 神社许愿墙 - React Native 应用
+# ⛩️ Wish Plaque — On-Chain Shrine Wishing Wall
 
-基于 Solana 区块链的去中心化许愿墙移动应用。
+> *"Sharing pain halves it. Sharing joy doubles it."*
+> 「痛苦分享可以减半，快乐分享就会加倍。」
 
-## 功能特性
+A native Android app that turns the ancient Japanese shrine tradition of writing wishes on wooden plaques into a permanent, on-chain experience. Every wish is stored as a real Solana account — immutable, public, and witnessed by the world.
 
-- ⛩️ **神社许愿板**: 浏览最近20个愿望，为他人捐赠支持
-- ✨ **许愿界面**: 写下心愿并存储到区块链上
-- 📜 **我的愿望**: 管理自己的愿望，标记实现状态
+Built for the **Solana Mobile Hackathon** as a first-class mobile experience using the Solana Mobile Stack.
 
-## 技术栈
+---
 
-- **Framework**: React Native + Expo
-- **Navigation**: React Navigation (Bottom Tabs)
-- **Blockchain**: Solana Web3.js + Anchor
-- **Wallet**: Solana Mobile Wallet Adapter
-- **Language**: TypeScript
+## ✨ Features
 
-## 项目结构
+| Tab | Description |
+|-----|-------------|
+| ⛩️ **Shrine** | Browse all wishes posted on-chain by everyone, in real time |
+| ✍️ **Make a Wish** | Write your wish, sign with your wallet via MWA, publish to Solana in seconds |
+| 🪬 **My Wishes** | View all wishes you have ever made — your personal on-chain journal |
+
+- 🌐 **Bilingual UI** — full Chinese / English toggle
+- 🔄 **Auto-refresh** on screen focus via `useFocusEffect`
+- 🔑 **Switch wallet** without leaving the app
+- 📜 **All wishes** loaded with infinite scroll — no artificial limits
+
+---
+
+## 🏗️ Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Mobile Framework | React Native 0.81.5 + Expo 54 |
+| JS Engine | Hermes |
+| Language | TypeScript |
+| Blockchain | Solana Devnet |
+| Smart Contract | Anchor 0.32 |
+| Wallet Integration | Mobile Wallet Adapter v2 (`@solana-mobile/mobile-wallet-adapter-protocol-web3js`) |
+| On-chain Data | `@solana/web3.js` — deterministic PDA derivation, no third-party indexers |
+| Navigation | React Navigation 7 (Bottom Tabs) |
+| i18n | i18next + react-i18next |
+
+---
+
+## 🔗 On-Chain Architecture
+
+Each wish is stored as a standalone **PDA (Program Derived Address)** account on Solana:
+
+```
+WishWallState PDA  →  stores total_wishes counter
+Wish PDA [1..N]    →  each wish: owner, content, nickname, created_at, status
+```
+
+**Data fetching flow (no indexer required):**
+1. Fetch `WishWallState` PDA → read `total_wishes`
+2. Derive all wish PDAs deterministically (`wish_id` 1 → N)
+3. Batch fetch with `getMultipleAccountsInfo` (100 per batch)
+4. Manual Borsh deserialization (BorshCoder is incompatible with Hermes)
+
+**Transaction signing flow:**
+- Uses `wallet.signAndSendTransactions()` + MWA `reauthorize` — delegates signing and broadcast entirely to the wallet app, solving silent failure issues in Hermes.
+
+---
+
+## 📁 Project Structure
 
 ```
 src/
 ├── components/
-│   └── WishCard.tsx          # 愿望卡片组件
+│   ├── WishCard.tsx           # Wish card component
+│   └── LanguageToggle.tsx     # zh/en language switch
 ├── screens/
-│   ├── HomeScreen.tsx        # 神社许愿板
-│   ├── CreateWishScreen.tsx  # 许愿界面
-│   └── MyWishesScreen.tsx    # 我的愿望
+│   ├── HomeScreen.tsx         # ⛩️ Shrine — all wishes
+│   ├── CreateWishScreen.tsx   # ✍️ Make a wish
+│   └── MyWishesScreen.tsx     # 🪬 My wishes
 ├── hooks/
-│   ├── useWallet.ts          # 钱包连接 hook
-│   ├── useProgram.ts         # 程序交互 hook
-│   └── useWishes.ts          # 愿望查询 hook
+│   ├── useWishes.ts           # Fetch & parse on-chain wishes
+│   └── useProgram.ts          # Anchor program interactions
+├── providers/
+│   └── WalletProvider.tsx     # MWA wallet context
 ├── utils/
-│   ├── constants.ts          # 常量配置
-│   ├── solana.ts             # Solana 工具函数
-│   └── wish_wall.json        # Anchor IDL
+│   ├── solana.ts              # Connection, PDA helpers
+│   ├── constants.ts           # Program ID, cluster config
+│   └── wish_wall.json         # Anchor IDL
+├── i18n/
+│   ├── zh.ts                  # Chinese strings
+│   └── en.ts                  # English strings
 ├── navigation/
-│   └── AppNavigator.tsx      # 底部导航
+│   └── AppNavigator.tsx       # Bottom tab navigator
 └── types/
-    └── index.ts              # TypeScript 类型定义
+    └── index.ts               # TypeScript types
 ```
 
-## 安装和运行
+---
 
-### 前置要求
+## 🚀 Getting Started
 
-- Node.js 16+
-- npm 或 yarn
-- Expo CLI
-- Android 设备或模拟器（支持 Solana Mobile）
+### Prerequisites
 
-### 安装依赖
+- Node.js 18+
+- Android device or emulator with a Solana wallet installed (e.g. [Phantom Mobile](https://phantom.app/download))
+- JDK 17+ and Android SDK (for local APK build)
+
+### Install dependencies
 
 ```bash
-cd wish-wall-app
 npm install
 ```
 
-### 运行应用
+### Run in development
 
 ```bash
-# 启动 Expo 开发服务器
-npm start
-
-# 或直接在 Android 上运行
 npm run android
 ```
 
-## 核心依赖
-
-```json
-{
-  "dependencies": {
-    "expo": "~54.0.33",
-    "react": "19.1.0",
-    "react-native": "0.81.5",
-    "@solana/web3.js": "^1.x.x",
-    "@coral-xyz/anchor": "^0.x.x",
-    "@solana-mobile/mobile-wallet-adapter-protocol": "^2.x.x",
-    "@react-navigation/native": "^6.x.x",
-    "@react-navigation/bottom-tabs": "^6.x.x",
-    "react-native-get-random-values": "^1.x.x",
-    "buffer": "^6.x.x"
-  }
-}
-```
-
-## 配置
-
-### 更新 Program ID
-
-在 `src/utils/constants.ts` 中更新智能合约的 Program ID：
-
-```typescript
-export const WISH_WALL_PROGRAM_ID = new PublicKey(
-  'YOUR_DEPLOYED_PROGRAM_ID_HERE'
-);
-```
-
-### 切换网络
-
-在 `src/utils/constants.ts` 中修改网络配置：
-
-```typescript
-export const CLUSTER = 'devnet'; // 或 'mainnet-beta'
-```
-
-## 使用流程
-
-### 1. 连接钱包
-
-在许愿或查看我的愿望之前，需要先连接 Solana Mobile 钱包：
-- 点击"连接钱包"按钮
-- 授权应用访问钱包
-- 连接成功后会显示钱包地址和余额
-
-### 2. 创建愿望
-
-1. 进入"许愿"标签
-2. 输入心愿内容（最多500字符）
-3. 输入署名昵称（最多50字符）
-4. 点击"许愿"按钮
-5. 确认交易（约需 0.01-0.02 SOL）
-6. 等待交易确认
-
-### 3. 浏览愿望板
-
-1. 进入"神社"标签
-2. 上下滑动浏览最近的20个愿望
-3. 点击"助力"按钮为他人捐赠
-4. 输入捐赠金额并确认
-
-### 4. 管理我的愿望
-
-1. 进入"我的"标签
-2. 查看自己的所有愿望
-3. 点击愿望进行还愿
-4. 选择"愿望实现"或"事与愿违"
-
-## 愿望状态说明
-
-- 🟡 **黄色 - 待实现**: 初始状态
-- 🟢 **绿色 - 已实现**: 标记为愿望实现
-- 🟡 **黄色 - 未实现**: 标记为事与愿违（保持黄色）
-
-## 开发说明
-
-### 调试
+### Build release APK locally
 
 ```bash
-# 查看日志
-npx expo start --dev-client
-
-# 清除缓存
-npx expo start -c
+cd android
+./gradlew assembleRelease
+# APK → android/app/build/outputs/apk/release/app-release.apk
 ```
 
-### 构建 APK
+---
 
-```bash
-# 安装 EAS CLI
-npm install -g eas-cli
+## ⚙️ Configuration
 
-# 登录 Expo 账号
-eas login
+Update `src/utils/constants.ts` to point to your deployed program:
 
-# 配置构建
-eas build:configure
-
-# 构建 Android APK
-eas build --platform android --profile preview
+```typescript
+export const WISH_WALL_PROGRAM_ID = new PublicKey('YOUR_PROGRAM_ID');
+export const CLUSTER = 'devnet'; // or 'mainnet-beta'
 ```
 
-## 常见问题
+---
 
-### 1. 钱包连接失败
+## 🧩 Key Engineering Challenges
 
-确保：
-- 设备上已安装兼容的 Solana 钱包（如 Phantom Mobile）
-- 应用已获得必要权限
-- 网络连接正常
+### 1. Silent transaction failures in Hermes
+The standard pattern — `signTransactions()` → manual serialization → `sendRawTransaction()` — failed silently in React Native's Hermes engine: the wallet confirmed but nothing landed on-chain.
 
-### 2. 交易失败
+**Fix:** delegate everything to `wallet.signAndSendTransactions()` combined with MWA's `reauthorize` flow.
 
-可能原因：
-- 钱包余额不足
-- 网络拥堵
-- RPC 节点问题
+### 2. Borsh deserialization without BorshCoder
+Anchor's `BorshCoder` relies on browser APIs incompatible with Hermes.
 
-解决方案：
-- 确保钱包有足够 SOL
-- 等待网络恢复
-- 切换 RPC 节点
+**Fix:** wrote manual byte-level Borsh parsing functions (`readU32LE`, `readU64LE`, `readString`) to deserialize on-chain account data from scratch.
 
-### 3. 愿望不显示
+---
 
-可能原因：
-- 交易尚未确认
-- 缓存问题
+## 🗺️ Roadmap
 
-解决方案：
-- 等待交易确认（约10-30秒）
-- 下拉刷新列表
+- [ ] Wish donations — support others' wishes with SOL
+- [ ] NFT plaques — mint fulfilled wishes as on-chain keepsakes
+- [ ] Social layer — react to wishes, build connections
+- [ ] Search & filter wishes
+- [ ] Push notifications on wish fulfillment
+- [ ] Mainnet deployment with reduced account size
 
-## 安全注意事项
+---
 
-- ✅ 永不分享私钥
-- ✅ 仅连接信任的应用
-- ✅ 确认交易详情
-- ✅ 保持钱包应用更新
-
-## 待实现功能
-
-- [ ] NFT 展示（待智能合约添加 NFT 功能）
-- [ ] 愿望详情页
-- [ ] 分享功能
-- [ ] 搜索和过滤
-- [ ] 推送通知
-- [ ] 离线缓存
-- [ ] 多语言支持
-
-## License
+## 📄 License
 
 MIT
 
 ---
 
-**注意**: 此应用目前连接到 Solana Devnet 测试网络。在切换到 Mainnet 之前，请确保充分测试所有功能。
+> ⚠️ Currently connected to **Solana Devnet**. Devnet SOL has no real value and is for testing only.
