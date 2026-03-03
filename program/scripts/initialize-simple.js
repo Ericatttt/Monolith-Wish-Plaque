@@ -6,11 +6,11 @@ async function main() {
   console.log("🚀 Initializing Wish Wall Program...\n");
 
   // Program ID
-  const programId = new PublicKey("HXP5UvapL8Pv9P1vY7LYhAMv2VcbJZnn7zhfRJ9Eb8Bv");
+  const programId = new PublicKey("BjqDFqtQoFVmH1HKEN8NUcTPrbhVXJZp7P8s2pibvL8M");
   console.log("Program ID:", programId.toString());
 
-  // Connect to local validator
-  const connection = new Connection("http://localhost:8899", "confirmed");
+  // Connect to devnet
+  const connection = new Connection("https://api.devnet.solana.com", "confirmed");
 
   // Load the keypair
   const keypairPath = require("os").homedir() + "/.config/solana/id.json";

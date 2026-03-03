@@ -7,13 +7,13 @@ mod error;
 use state::*;
 use error::*;
 
-declare_id!("HXP5UvapL8Pv9P1vY7LYhAMv2VcbJZnn7zhfRJ9Eb8Bv");
+declare_id!("BjqDFqtQoFVmH1HKEN8NUcTPrbhVXJZp7P8s2pibvL8M");
 
 /// Protocol fee per wish creation: 0.001 SOL (in lamports)
 pub const PROTOCOL_FEE: u64 = 1_000_000;
 
-/// Treasury wallet that receives the protocol fee
-pub const TREASURY: Pubkey = solana_program::pubkey!("WZKDQoF2Cx5rAFDKH3xjYiZbHNDmZgucsZLyQEAshtn");
+/// Treasury wallet address that receives the protocol fee
+pub const TREASURY_STR: &str = "WZKDQoF2Cx5rAFDKH3xjYiZbHNDmZgucsZLyQEAshtn";
 
 #[program]
 pub mod wish_wall {
@@ -190,7 +190,7 @@ pub struct CreateWish<'info> {
     pub owner: Signer<'info>,
 
     /// CHECK: Treasury wallet that receives the protocol fee
-    #[account(mut, address = TREASURY)]
+    #[account(mut, address = TREASURY_STR.parse::<Pubkey>().unwrap())]
     pub treasury: UncheckedAccount<'info>,
 
     pub system_program: Program<'info, System>,

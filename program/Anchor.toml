@@ -8,11 +8,14 @@ skip-lint = false
 [programs.localnet]
 wish_wall = "5h3QsDrsKy4WFmjjqkVGSHyiKXas2enKbYirWv3SCE7c"
 
+[programs.devnet]
+wish_wall = "BjqDFqtQoFVmH1HKEN8NUcTPrbhVXJZp7P8s2pibvL8M"
+
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "localnet"
+cluster = "devnet"
 wallet = "~/.config/solana/id.json"
 
 [scripts]

@@ -1,5 +1,5 @@
 {
-  "address": "HXP5UvapL8Pv9P1vY7LYhAMv2VcbJZnn7zhfRJ9Eb8Bv",
+  "address": "BjqDFqtQoFVmH1HKEN8NUcTPrbhVXJZp7P8s2pibvL8M",
   "metadata": {
     "name": "wish_wall",
     "version": "0.1.0",
@@ -60,6 +60,10 @@
           "name": "owner",
           "writable": true,
           "signer": true
+        },
+        {
+          "name": "treasury",
+          "writable": true
         },
         {
           "name": "system_program",

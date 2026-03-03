@@ -2,7 +2,7 @@ import { PublicKey, clusterApiUrl } from '@solana/web3.js';
 
 // Program ID - 本地部署的 Program ID
 export const WISH_WALL_PROGRAM_ID = new PublicKey(
-  'HXP5UvapL8Pv9P1vY7LYhAMv2VcbJZnn7zhfRJ9Eb8Bv'
+  'BjqDFqtQoFVmH1HKEN8NUcTPrbhVXJZp7P8s2pibvL8M'
 );
 
 // Cluster configuration
