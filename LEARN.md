@@ -20,6 +20,7 @@
 12. [关键工程决策](#12-关键工程决策)
 13. [数据流全程追踪](#13-数据流全程追踪)
 14. [如何扩展](#14-如何扩展)
+15. [v2 版本更新](#15-v2-版本更新)
 
 ---
 
@@ -400,16 +401,20 @@ const createWish = async (content: string, nickname: string): Promise<string> =>
   ]);
 
   // 4. 构建 TransactionInstruction（指定程序ID + 账户列表 + 数据）
+  const treasuryPubkey = new PublicKey(TREASURY_ADDRESS);
   const ix = new TransactionInstruction({
     programId: WISH_WALL_PROGRAM_ID,
     keys: [
-      { pubkey: statePda,  isSigner: false, isWritable: true  }, // 状态账户（需要更新 total_wishes）
-      { pubkey: wishPda,   isSigner: false, isWritable: true  }, // 新创建的 Wish 账户
-      { pubkey: publicKey, isSigner: true,  isWritable: true  }, // 付款人（支付 rent）
-      { pubkey: SystemProgram.programId, isSigner: false, isWritable: false }, // 系统程序（用于创建账户）
+      { pubkey: statePda,        isSigner: false, isWritable: true  }, // 状态账户（更新 total_wishes）
+      { pubkey: wishPda,         isSigner: false, isWritable: true  }, // 新创建的 Wish 账户
+      { pubkey: publicKey,       isSigner: true,  isWritable: true  }, // 付款人（支付 rent + 协议费）
+      { pubkey: treasuryPubkey,  isSigner: false, isWritable: true  }, // v2: 协议费接收账户（0.001 SOL）
+      { pubkey: SystemProgram.programId, isSigner: false, isWritable: false }, // 系统程序
     ],
     data,
   });
+  // v2 说明：合约内部会通过 CPI 自动将 0.001 SOL 从 publicKey 转到 treasury
+  // 客户端无需手动处理，只需在账户列表里提供 treasury 地址即可
 
   // 5. 组装 Transaction
   const tx = new Transaction();
@@ -528,12 +533,15 @@ const { wishes, isLoading, error, refresh } = useWishes(publicKey ?? undefined);
 ### 8.1 constants.ts — 全局配置
 
 ```ts
-export const WISH_WALL_PROGRAM_ID = new PublicKey('HXP5UvapL8Pv9P1vY7LYhAMv2VcbJZnn7zhfRJ9Eb8Bv');
+// v2 Program ID（v1: HXP5UvapL8Pv9P1vY7LYhAMv2VcbJZnn7zhfRJ9Eb8Bv）
+export const WISH_WALL_PROGRAM_ID = new PublicKey('BjqDFqtQoFVmH1HKEN8NUcTPrbhVXJZp7P8s2pibvL8M');
 export const RPC_ENDPOINT = 'https://solana-devnet.g.alchemy.com/v2/...';
 export const WISH_WALL_STATE_SEED = 'wish-wall-state'; // PDA 种子
 export const WISH_SEED = 'wish';                        // PDA 种子
-export const MAX_CONTENT_LENGTH = 500;
+export const MAX_CONTENT_LENGTH = 280;  // v2: 从 500 降至 280（Twitter 风格限制）
 export const MAX_NICKNAME_LENGTH = 50;
+export const PROTOCOL_FEE_LAMPORTS = 1_000_000; // v2: 每次许愿收取 0.001 SOL 协议费
+export const TREASURY_ADDRESS = 'WZKDQoF2Cx5rAFDKH3xjYiZbHNDmZgucsZLyQEAshtn'; // 协议费接收钱包
 ```
 
 ### 8.2 solana.ts — 工具函数
@@ -840,7 +848,110 @@ export const RPC_ENDPOINT = 'https://your-mainnet-rpc-endpoint';
 - `nickname` 预留 `50 chars × 4 bytes`
 - 未使用的 `nft_mint` 字段 32 字节
 
-优化方向：将 Rust 合约中 `MAX_CONTENT_LEN` 改为字节限制而非字符数，并移除 `nft_mint`，可将账户大小降低 60%，许愿成本从 ~0.016 SOL 降到 ~0.006 SOL。
+✅ **v2 已优化**：`MAX_CONTENT_LEN` 从 500 降至 280 字符（Twitter 风格限制），账户大小从 2306 → 1426 字节，许愿成本从 ~0.016 SOL 降至 ~0.010 SOL。`nft_mint` 字段保留为未来 NFT 功能预留。
+
+---
+
+## 15. v2 版本更新
+
+### 15.1 设计目标
+
+v2 有两个核心目标：
+1. **降低许愿成本** — 减少链上账户空间占用
+2. **加入协议费** — 每次许愿收取少量 SOL 到开发者钱包，实现项目可持续
+
+### 15.2 部署策略：anchor deploy（新 Program ID）
+
+v2 选择 `anchor deploy`（而非 `anchor upgrade`），理由：
+
+| 方案 | 结果 |
+|------|------|
+| `anchor upgrade`（同 Program ID）| v1 APK 的 `createWish` 因账户数量不匹配（4个→5个）直接报错 |
+| `anchor deploy`（新 Program ID）| v1 APK 继续指向旧合约，完全不受影响 |
+
+代价是两个版本的许愿墙相互独立，v1/v2 用户看不到彼此的愿望。
+
+| | v1 | v2 |
+|--|----|----|
+| Program ID | `HXP5UvapL8...` | `BjqDFqtQoF...` |
+| WishWallState | 独立 | 独立（从 0 重新计数）|
+
+### 15.3 合约变更（Rust）
+
+**state.rs — 账户大小压缩**
+
+```rust
+// v1
+pub const MAX_CONTENT_LEN: usize = 500;
+// LEN = 2306 bytes → rent ~0.016 SOL
+
+// v2
+pub const MAX_CONTENT_LEN: usize = 280; // Twitter 风格上限
+// LEN = 1426 bytes → rent ~0.010 SOL（节省 38%）
+```
+
+**lib.rs — 协议费常量与账户**
+
+```rust
+pub const PROTOCOL_FEE: u64 = 1_000_000; // 0.001 SOL（lamports）
+pub const TREASURY_STR: &str = "WZKDQoF2Cx5rAFDKH3xjYiZbHNDmZgucsZLyQEAshtn";
+```
+
+`CreateWish` Context 新增 treasury 账户，并通过 Anchor 的 `address =` 约束保证地址正确：
+
+```rust
+/// CHECK: Treasury wallet that receives the protocol fee
+#[account(mut, address = TREASURY_STR.parse::<Pubkey>().unwrap())]
+pub treasury: UncheckedAccount<'info>,
+```
+
+`create_wish` 指令末尾新增 CPI 转账：
+
+```rust
+let fee_transfer = Transfer {
+    from: ctx.accounts.owner.to_account_info(),
+    to: ctx.accounts.treasury.to_account_info(),
+};
+transfer(CpiContext::new(ctx.accounts.system_program.to_account_info(), fee_transfer), PROTOCOL_FEE)?;
+```
+
+**为什么用 `TREASURY_STR.parse::<Pubkey>().unwrap()` 而非 `pubkey!` 宏？**
+
+Anchor 0.32 在编译环境中 `solana_program::pubkey!` 宏路径无法直接访问（crate 层级问题）。字符串 `.parse()` 是等价的运行时方案，性能损耗可忽略不计（每次指令执行只解析一次）。
+
+### 15.4 前端变更（TypeScript）
+
+**constants.ts 新增三个常量：**
+
+```ts
+export const MAX_CONTENT_LENGTH = 280;           // 同步合约上限
+export const PROTOCOL_FEE_LAMPORTS = 1_000_000;  // 0.001 SOL，仅用于 UI 显示提示
+export const TREASURY_ADDRESS = 'WZKDQoF2Cx5rAFDKH3xjYiZbHNDmZgucsZLyQEAshtn';
+```
+
+**useProgram.ts — createWish 账户列表增加第 4 个账户：**
+
+```ts
+const treasuryPubkey = new PublicKey(TREASURY_ADDRESS);
+keys: [
+  { pubkey: statePda,       isSigner: false, isWritable: true  },
+  { pubkey: wishPda,        isSigner: false, isWritable: true  },
+  { pubkey: publicKey,      isSigner: true,  isWritable: true  },
+  { pubkey: treasuryPubkey, isSigner: false, isWritable: true  }, // ← 新增
+  { pubkey: SystemProgram.programId, isSigner: false, isWritable: false },
+],
+```
+
+Solana 指令的账户列表顺序必须与合约 `#[derive(Accounts)]` 结构体字段顺序完全一致，否则合约收到的账户数据会对不上，交易报错。
+
+### 15.5 v2 许愿费用明细
+
+| 费用项 | 金额 | 说明 |
+|--------|------|------|
+| Rent-exempt 押金 | ~0.010 SOL | 1426 字节账户永久存储费，不可退（Solana 规则）|
+| 协议费 | 0.001 SOL | 直接转入开发者钱包 |
+| 交易手续费 | ~0.000005 SOL | Solana 网络费，极低 |
+| **合计** | **~0.011 SOL** | 比 v1 的 ~0.017 SOL 节省约 35% |
 
 ---
 
