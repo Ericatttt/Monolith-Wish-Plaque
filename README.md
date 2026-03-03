@@ -46,7 +46,7 @@ Each wish is stored as a standalone **PDA (Program Derived Address)** account on
 
 ```
 WishWallState PDA  →  stores total_wishes counter
-Wish PDA [1..N]    →  each wish: owner, content, nickname, created_at, status
+Wish PDA [1..N]    →  each wish: owner, content, nickname, created_at, status, total_donations
 ```
 
 **Data fetching flow (no indexer required):**
@@ -63,30 +63,37 @@ Wish PDA [1..N]    →  each wish: owner, content, nickname, created_at, status
 ## 📁 Project Structure
 
 ```
-src/
-├── components/
-│   ├── WishCard.tsx           # Wish card component
-│   └── LanguageToggle.tsx     # zh/en language switch
-├── screens/
-│   ├── HomeScreen.tsx         # ⛩️ Shrine — all wishes
-│   ├── CreateWishScreen.tsx   # ✍️ Make a wish
-│   └── MyWishesScreen.tsx     # 🪬 My wishes
-├── hooks/
-│   ├── useWishes.ts           # Fetch & parse on-chain wishes
-│   └── useProgram.ts          # Anchor program interactions
-├── providers/
-│   └── WalletProvider.tsx     # MWA wallet context
-├── utils/
-│   ├── solana.ts              # Connection, PDA helpers
-│   ├── constants.ts           # Program ID, cluster config
-│   └── wish_wall.json         # Anchor IDL
-├── i18n/
-│   ├── zh.ts                  # Chinese strings
-│   └── en.ts                  # English strings
-├── navigation/
-│   └── AppNavigator.tsx       # Bottom tab navigator
-└── types/
-    └── index.ts               # TypeScript types
+.
+├── src/
+│   ├── components/
+│   │   ├── WishCard.tsx           # Wish card component
+│   │   └── LanguageToggle.tsx     # zh/en language switch
+│   ├── screens/
+│   │   ├── HomeScreen.tsx         # ⛩️ Shrine — all wishes
+│   │   ├── CreateWishScreen.tsx   # ✍️ Make a wish
+│   │   └── MyWishesScreen.tsx     # 🪬 My wishes
+│   ├── hooks/
+│   │   ├── useWishes.ts           # Fetch & parse on-chain wishes
+│   │   └── useProgram.ts          # Anchor program interactions
+│   ├── providers/
+│   │   └── WalletProvider.tsx     # MWA wallet context
+│   ├── utils/
+│   │   ├── solana.ts              # Connection, PDA helpers
+│   │   ├── constants.ts           # Program ID, cluster config
+│   │   └── wish_wall.json         # Anchor IDL
+│   ├── i18n/
+│   │   ├── zh.ts                  # Chinese strings
+│   │   └── en.ts                  # English strings
+│   ├── navigation/
+│   │   └── AppNavigator.tsx       # Bottom tab navigator
+│   └── types/
+│       └── index.ts               # TypeScript types
+└── program/                       # Anchor smart contract (Rust)
+    ├── programs/wish_wall/src/
+    │   ├── lib.rs                 # 4 instructions + Context structs
+    │   ├── state.rs               # WishWallState, Wish, WishStatus
+    │   └── error.rs               # Custom error codes
+    └── README.md                  # Full contract documentation
 ```
 
 ---
@@ -148,7 +155,7 @@ Anchor's `BorshCoder` relies on browser APIs incompatible with Hermes.
 
 ## 🗺️ Roadmap
 
-- [ ] Wish donations — support others' wishes with SOL
+- [x] Wish donations — support others' wishes with SOL (contract + UI complete)
 - [ ] NFT plaques — mint fulfilled wishes as on-chain keepsakes
 - [ ] Social layer — react to wishes, build connections
 - [ ] Search & filter wishes
