@@ -8,7 +8,7 @@ import {
   connection,
 } from '../utils/solana';
 import { WishStatus } from '../types';
-import { WISH_WALL_PROGRAM_ID } from '../utils/constants';
+import { WISH_WALL_PROGRAM_ID, TREASURY_ADDRESS } from '../utils/constants';
 
 // Instruction discriminators from IDL
 const DISCRIMINATORS = {
@@ -70,12 +70,15 @@ export const useProgram = () => {
           encodeString(nickname),
         ]);
 
+        const treasuryPubkey = new PublicKey(TREASURY_ADDRESS);
+
         const ix = new TransactionInstruction({
           programId: WISH_WALL_PROGRAM_ID,
           keys: [
             { pubkey: statePda,                  isSigner: false, isWritable: true  },
             { pubkey: wishPda,                   isSigner: false, isWritable: true  },
             { pubkey: publicKey,                 isSigner: true,  isWritable: true  },
+            { pubkey: treasuryPubkey,            isSigner: false, isWritable: true  },
             { pubkey: SystemProgram.programId,   isSigner: false, isWritable: false },
           ],
           data,

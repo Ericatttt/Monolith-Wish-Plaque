@@ -44,8 +44,8 @@ pub struct Wish {
 
 impl Wish {
     /// Calculate space needed for Wish account
-    /// Using max sizes: 500 chars for content, 50 chars for nickname
-    pub const MAX_CONTENT_LEN: usize = 500;
+    /// Using max sizes: 280 chars for content (Twitter limit), 50 chars for nickname
+    pub const MAX_CONTENT_LEN: usize = 280;
     pub const MAX_NICKNAME_LEN: usize = 50;
 
     pub const LEN: usize = 8 + // discriminator
@@ -58,6 +58,7 @@ impl Wish {
         32 + // nft_mint (Pubkey)
         8 +  // total_donations (u64)
         1;   // bump (u8)
+        // Total: 8+32+8+(4+1120)+(4+200)+8+1+32+8+1 = 1426 bytes (~0.010 SOL)
 }
 
 /// Status of a wish

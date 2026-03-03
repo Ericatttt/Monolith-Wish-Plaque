@@ -14,9 +14,13 @@ export const WISH_WALL_STATE_SEED = 'wish-wall-state';
 export const WISH_SEED = 'wish';
 
 // UI Constants
-export const MAX_CONTENT_LENGTH = 500;
+export const MAX_CONTENT_LENGTH = 280; // Matches contract MAX_CONTENT_LEN (Twitter-style limit)
 export const MAX_NICKNAME_LENGTH = 50;
 export const WISHES_TO_DISPLAY = 20;
+
+// Protocol fee (must match contract PROTOCOL_FEE)
+export const PROTOCOL_FEE_LAMPORTS = 1_000_000; // 0.001 SOL
+export const TREASURY_ADDRESS = 'WZKDQoF2Cx5rAFDKH3xjYiZbHNDmZgucsZLyQEAshtn';
 
 // Lamports conversion
 export const LAMPORTS_PER_SOL = 1_000_000_000;

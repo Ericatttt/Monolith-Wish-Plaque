@@ -9,6 +9,12 @@ use error::*;
 
 declare_id!("HXP5UvapL8Pv9P1vY7LYhAMv2VcbJZnn7zhfRJ9Eb8Bv");
 
+/// Protocol fee per wish creation: 0.001 SOL (in lamports)
+pub const PROTOCOL_FEE: u64 = 1_000_000;
+
+/// Treasury wallet that receives the protocol fee
+pub const TREASURY: Pubkey = solana_program::pubkey!("WZKDQoF2Cx5rAFDKH3xjYiZbHNDmZgucsZLyQEAshtn");
+
 #[program]
 pub mod wish_wall {
     use super::*;
@@ -62,7 +68,19 @@ pub mod wish_wall {
         wish.total_donations = 0;
         wish.bump = ctx.bumps.wish;
 
+        // Transfer protocol fee to treasury
+        let fee_transfer = Transfer {
+            from: ctx.accounts.owner.to_account_info(),
+            to: ctx.accounts.treasury.to_account_info(),
+        };
+        let fee_cpi_ctx = CpiContext::new(
+            ctx.accounts.system_program.to_account_info(),
+            fee_transfer,
+        );
+        transfer(fee_cpi_ctx, PROTOCOL_FEE)?;
+
         msg!("Wish #{} created by {}: {}", wish.wish_id, wish.nickname, content);
+        msg!("Protocol fee {} lamports sent to treasury", PROTOCOL_FEE);
         Ok(())
     }
 
@@ -170,6 +188,10 @@ pub struct CreateWish<'info> {
 
     #[account(mut)]
     pub owner: Signer<'info>,
+
+    /// CHECK: Treasury wallet that receives the protocol fee
+    #[account(mut, address = TREASURY)]
+    pub treasury: UncheckedAccount<'info>,
 
     pub system_program: Program<'info, System>,
 }
