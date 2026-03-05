@@ -16,16 +16,17 @@ export const AppNavigator = () => {
     <Tab.Navigator
       screenOptions={{
         headerShown: true,
-        headerStyle: { backgroundColor: '#FF5722' },
+        headerStyle: { backgroundColor: '#C8360A' },
         headerTintColor: '#fff',
         headerTitleStyle: { fontWeight: 'bold', fontSize: 18 },
         headerTitle: '⛩️ 神社 Shrine',
         headerRight: () => <LanguageToggle />,
-        tabBarActiveTintColor: '#FF5722',
-        tabBarInactiveTintColor: '#999',
+        tabBarActiveTintColor: '#C8360A',
+        tabBarInactiveTintColor: '#BFB0A8',
         tabBarStyle: {
+          backgroundColor: '#FFFFFF',
           borderTopWidth: 1,
-          borderTopColor: '#e0e0e0',
+          borderTopColor: '#EDE0D4',
           paddingTop: 8,
           paddingBottom: 8,
           height: 60,

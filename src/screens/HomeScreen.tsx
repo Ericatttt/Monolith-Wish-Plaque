@@ -91,16 +91,16 @@ export const HomeScreen = () => {
 
       {isLoading && wishes.length === 0 ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FF5722" />
+          <ActivityIndicator size="large" color="#C8360A" />
           <Text style={styles.loadingText}>{t('home.loading')}</Text>
         </View>
       ) : error ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>⚠️</Text>
-          <Text style={styles.emptyTitle}>加载失败</Text>
+          <Text style={styles.emptyTitle}>{t('home.loadError')}</Text>
           <Text style={styles.emptySubtitle}>{error}</Text>
-          <TouchableOpacity onPress={refresh} style={{ marginTop: 16, paddingHorizontal: 24, paddingVertical: 10, backgroundColor: '#FF5722', borderRadius: 8 }}>
-            <Text style={{ color: '#fff', fontWeight: 'bold' }}>重试</Text>
+          <TouchableOpacity onPress={refresh} style={styles.retryButton}>
+            <Text style={styles.retryButtonText}>{t('home.retry')}</Text>
           </TouchableOpacity>
         </View>
       ) : wishes.length === 0 ? (
@@ -120,7 +120,7 @@ export const HomeScreen = () => {
             <RefreshControl
               refreshing={isLoading}
               onRefresh={refresh}
-              colors={['#FF5722']}
+              colors={['#C8360A']}
             />
           }
           contentContainerStyle={styles.listContent}
@@ -192,18 +192,20 @@ export const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFF8F0',
   },
   subtitleBar: {
-    backgroundColor: '#FF5722',
-    paddingVertical: 8,
+    backgroundColor: '#FDF0E8',
+    paddingVertical: 7,
     paddingHorizontal: 20,
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#EDE0D4',
   },
   subtitleText: {
     fontSize: 13,
-    color: '#fff',
-    opacity: 0.9,
+    color: '#C8360A',
+    fontWeight: '500',
   },
   loadingContainer: {
     flex: 1,
@@ -213,7 +215,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#999',
+    color: '#8B6E5A',
   },
   emptyContainer: {
     flex: 1,
@@ -228,24 +230,37 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#2C1810',
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#999',
+    color: '#8B6E5A',
+    textAlign: 'center',
+  },
+  retryButton: {
+    marginTop: 16,
+    paddingHorizontal: 28,
+    paddingVertical: 10,
+    backgroundColor: '#C8360A',
+    borderRadius: 20,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   listContent: {
     paddingVertical: 8,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(44, 24, 16, 0.45)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 24,
     width: '85%',
@@ -254,36 +269,39 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#2C1810',
     marginBottom: 16,
     textAlign: 'center',
   },
   wishPreview: {
     fontSize: 14,
-    color: '#555',
+    color: '#4A3728',
     marginBottom: 8,
     padding: 12,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFF8F0',
     borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#EDE0D4',
   },
   wishOwner: {
     fontSize: 12,
-    color: '#999',
+    color: '#8B6E5A',
     marginBottom: 20,
   },
   inputLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#333',
+    color: '#2C1810',
     marginBottom: 8,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#EDE0D4',
     borderRadius: 8,
     padding: 12,
     fontSize: 16,
     marginBottom: 20,
+    color: '#2C1810',
   },
   modalButtons: {
     flexDirection: 'row',
@@ -296,15 +314,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cancelButton: {
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFF8F0',
+    borderWidth: 1,
+    borderColor: '#EDE0D4',
   },
   cancelButtonText: {
-    color: '#666',
+    color: '#8B6E5A',
     fontSize: 16,
     fontWeight: '600',
   },
   confirmButton: {
-    backgroundColor: '#FF5722',
+    backgroundColor: '#C8360A',
   },
   confirmButtonText: {
     color: '#fff',

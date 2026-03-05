@@ -111,16 +111,16 @@ export const MyWishesScreen = () => {
 
       {isLoading && wishes.length === 0 ? (
         <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#FF5722" />
+          <ActivityIndicator size="large" color="#C8360A" />
           <Text style={styles.loadingText}>{t('myWishes.loading')}</Text>
         </View>
       ) : error ? (
         <View style={styles.emptyContainer}>
           <Text style={styles.emptyText}>⚠️</Text>
-          <Text style={styles.emptyTitle}>加载失败</Text>
+          <Text style={styles.emptyTitle}>{t('myWishes.loadError')}</Text>
           <Text style={styles.emptySubtitle}>{error}</Text>
-          <TouchableOpacity onPress={refresh} style={{ marginTop: 16, paddingHorizontal: 24, paddingVertical: 10, backgroundColor: '#FF5722', borderRadius: 8 }}>
-            <Text style={{ color: '#fff', fontWeight: 'bold' }}>重试</Text>
+          <TouchableOpacity onPress={refresh} style={styles.retryButton}>
+            <Text style={styles.retryButtonText}>{t('myWishes.retry')}</Text>
           </TouchableOpacity>
         </View>
       ) : wishes.length === 0 ? (
@@ -144,7 +144,7 @@ export const MyWishesScreen = () => {
             <RefreshControl
               refreshing={isLoading}
               onRefresh={refresh}
-              colors={['#FF5722']}
+              colors={['#C8360A']}
             />
           }
           contentContainerStyle={styles.listContent}
@@ -226,7 +226,7 @@ export const MyWishesScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFF8F0',
   },
   connectContainer: {
     flex: 1,
@@ -241,17 +241,17 @@ const styles = StyleSheet.create({
   connectTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#2C1810',
     marginBottom: 8,
   },
   connectSubtitle: {
     fontSize: 14,
-    color: '#999',
+    color: '#8B6E5A',
     textAlign: 'center',
     marginBottom: 32,
   },
   connectButton: {
-    backgroundColor: '#FF5722',
+    backgroundColor: '#C8360A',
     paddingHorizontal: 40,
     paddingVertical: 16,
     borderRadius: 24,
@@ -264,15 +264,17 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   subtitleBar: {
-    backgroundColor: '#FF5722',
-    paddingVertical: 8,
+    backgroundColor: '#FDF0E8',
+    paddingVertical: 7,
     paddingHorizontal: 20,
     alignItems: 'center',
+    borderBottomWidth: 1,
+    borderBottomColor: '#EDE0D4',
   },
   subtitleText: {
     fontSize: 13,
-    color: '#fff',
-    opacity: 0.9,
+    color: '#C8360A',
+    fontWeight: '500',
   },
   loadingContainer: {
     flex: 1,
@@ -282,7 +284,7 @@ const styles = StyleSheet.create({
   loadingText: {
     marginTop: 12,
     fontSize: 16,
-    color: '#999',
+    color: '#8B6E5A',
   },
   emptyContainer: {
     flex: 1,
@@ -297,55 +299,70 @@ const styles = StyleSheet.create({
   emptyTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#2C1810',
     marginBottom: 8,
   },
   emptySubtitle: {
     fontSize: 14,
-    color: '#999',
+    color: '#8B6E5A',
     textAlign: 'center',
+  },
+  retryButton: {
+    marginTop: 16,
+    paddingHorizontal: 28,
+    paddingVertical: 10,
+    backgroundColor: '#C8360A',
+    borderRadius: 20,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 14,
   },
   listContent: {
     paddingVertical: 8,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: 'rgba(44, 24, 16, 0.45)',
     justifyContent: 'center',
     alignItems: 'center',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 24,
     width: '85%',
     maxWidth: 400,
   },
   modalTitle: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#2C1810',
     marginBottom: 20,
     textAlign: 'center',
   },
   wishInfo: {
-    backgroundColor: '#f5f5f5',
-    padding: 16,
-    borderRadius: 12,
+    backgroundColor: '#FFF8F0',
+    padding: 14,
+    borderRadius: 10,
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#EDE0D4',
   },
   wishContent: {
     fontSize: 14,
-    color: '#333',
-    marginBottom: 8,
+    color: '#4A3728',
+    marginBottom: 6,
+    lineHeight: 20,
   },
   wishMeta: {
     fontSize: 12,
-    color: '#999',
+    color: '#8B6E5A',
   },
   questionText: {
-    fontSize: 16,
-    color: '#555',
+    fontSize: 15,
+    color: '#4A3728',
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -364,7 +381,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4CAF50',
   },
   unfulfilledButton: {
-    backgroundColor: '#FFC107',
+    backgroundColor: '#E09B20',
   },
   statusButtonEmoji: {
     fontSize: 32,
@@ -386,7 +403,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   cancelButtonText: {
-    color: '#999',
+    color: '#8B6E5A',
     fontSize: 16,
   },
 });

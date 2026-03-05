@@ -22,6 +22,7 @@ export const WishCard: React.FC<WishCardProps> = ({
   const { account } = wish;
   const statusColor = WISH_STATUS_COLORS[account.status];
   const statusName = t(`status.${account.status}`);
+  const hasDonations = account.totalDonations > 0;
 
   return (
     <TouchableOpacity
@@ -43,20 +44,26 @@ export const WishCard: React.FC<WishCardProps> = ({
         {account.content}
       </Text>
 
-      <View style={styles.footer}>
-        <View style={styles.donationInfo}>
-          <Text style={styles.donationLabel}>{t('wishCard.donationLabel')}</Text>
-          <Text style={styles.donationAmount}>
-            {lamportsToSol(account.totalDonations).toFixed(4)} SOL
-          </Text>
-        </View>
+      {(hasDonations || showDonateButton) && (
+        <View style={styles.footer}>
+          {hasDonations ? (
+            <View style={styles.donationInfo}>
+              <Text style={styles.donationLabel}>{t('wishCard.donationLabel')}</Text>
+              <Text style={styles.donationAmount}>
+                {lamportsToSol(account.totalDonations).toFixed(4)} SOL
+              </Text>
+            </View>
+          ) : (
+            <View />
+          )}
 
-        {showDonateButton && (
-          <TouchableOpacity style={styles.donateButton} onPress={onDonate}>
-            <Text style={styles.donateButtonText}>{t('wishCard.supportButton')}</Text>
-          </TouchableOpacity>
-        )}
-      </View>
+          {showDonateButton && (
+            <TouchableOpacity style={styles.donateButton} onPress={onDonate}>
+              <Text style={styles.donateButtonText}>{t('wishCard.supportButton')}</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
 
       <Text style={styles.wishId}>{t('wishCard.wishId', { id: account.wishId.toString() })}</Text>
     </TouchableOpacity>
@@ -65,23 +72,23 @@ export const WishCard: React.FC<WishCardProps> = ({
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 16,
-    marginVertical: 8,
+    marginVertical: 6,
     marginHorizontal: 16,
     borderLeftWidth: 4,
-    elevation: 3,
-    shadowColor: '#000',
+    elevation: 2,
+    shadowColor: '#C4A882',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.12,
     shadowRadius: 4,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 12,
+    marginBottom: 10,
   },
   headerLeft: {
     flexDirection: 'row',
@@ -89,36 +96,36 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   nickname: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#2C1810',
     marginRight: 8,
   },
   statusBadge: {
     paddingHorizontal: 8,
     paddingVertical: 2,
-    borderRadius: 12,
+    borderRadius: 10,
   },
   statusText: {
-    fontSize: 12,
+    fontSize: 11,
     color: '#fff',
     fontWeight: '600',
   },
   date: {
     fontSize: 12,
-    color: '#999',
+    color: '#8B6E5A',
   },
   content: {
     fontSize: 14,
-    color: '#555',
-    lineHeight: 20,
-    marginBottom: 12,
+    color: '#4A3728',
+    lineHeight: 21,
+    marginBottom: 10,
   },
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 8,
+    marginTop: 4,
   },
   donationInfo: {
     flexDirection: 'row',
@@ -126,28 +133,28 @@ const styles = StyleSheet.create({
   },
   donationLabel: {
     fontSize: 12,
-    color: '#999',
+    color: '#8B6E5A',
     marginRight: 4,
   },
   donationAmount: {
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
-    color: '#FF9800',
+    color: '#B8860B',
   },
   donateButton: {
-    backgroundColor: '#FF5722',
-    paddingHorizontal: 20,
-    paddingVertical: 8,
-    borderRadius: 20,
+    backgroundColor: '#C8360A',
+    paddingHorizontal: 18,
+    paddingVertical: 7,
+    borderRadius: 18,
   },
   donateButtonText: {
     color: '#fff',
-    fontSize: 14,
+    fontSize: 13,
     fontWeight: '600',
   },
   wishId: {
     fontSize: 10,
-    color: '#ccc',
+    color: '#D4C4B8',
     marginTop: 8,
     textAlign: 'right',
   },

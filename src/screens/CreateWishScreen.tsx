@@ -111,6 +111,9 @@ export const CreateWishScreen = () => {
     );
   }
 
+  const contentNearLimit = content.length > MAX_CONTENT_LENGTH * 0.85;
+  const nicknameNearLimit = nickname.length > MAX_NICKNAME_LENGTH * 0.85;
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -123,6 +126,7 @@ export const CreateWishScreen = () => {
             <TextInput
               style={[styles.input, styles.textArea]}
               placeholder={t('create.contentPlaceholder')}
+              placeholderTextColor="#BFB0A8"
               multiline
               numberOfLines={6}
               value={content}
@@ -130,7 +134,7 @@ export const CreateWishScreen = () => {
               maxLength={MAX_CONTENT_LENGTH}
               textAlignVertical="top"
             />
-            <Text style={styles.charCount}>
+            <Text style={[styles.charCount, contentNearLimit && styles.charCountWarning]}>
               {content.length} / {MAX_CONTENT_LENGTH}
             </Text>
           </View>
@@ -140,11 +144,12 @@ export const CreateWishScreen = () => {
             <TextInput
               style={styles.input}
               placeholder={t('create.nicknamePlaceholder')}
+              placeholderTextColor="#BFB0A8"
               value={nickname}
               onChangeText={setNickname}
               maxLength={MAX_NICKNAME_LENGTH}
             />
-            <Text style={styles.charCount}>
+            <Text style={[styles.charCount, nicknameNearLimit && styles.charCountWarning]}>
               {nickname.length} / {MAX_NICKNAME_LENGTH}
             </Text>
           </View>
@@ -180,9 +185,9 @@ export const CreateWishScreen = () => {
                 disabled={isSwitching || isSubmitting}
               >
                 {isSwitching ? (
-                  <ActivityIndicator size="small" color="#1976D2" />
+                  <ActivityIndicator size="small" color="#C8360A" />
                 ) : (
-                  <Text style={styles.switchButtonText}>切换钱包</Text>
+                  <Text style={styles.switchButtonText}>{t('create.switchWallet')}</Text>
                 )}
               </TouchableOpacity>
             </View>
@@ -215,7 +220,7 @@ export const CreateWishScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#FFF8F0',
   },
   scrollContent: {
     flexGrow: 1,
@@ -233,17 +238,17 @@ const styles = StyleSheet.create({
   connectTitle: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#2C1810',
     marginBottom: 8,
   },
   connectSubtitle: {
     fontSize: 14,
-    color: '#999',
+    color: '#8B6E5A',
     textAlign: 'center',
     marginBottom: 32,
   },
   connectButton: {
-    backgroundColor: '#FF5722',
+    backgroundColor: '#C8360A',
     paddingHorizontal: 40,
     paddingVertical: 16,
     borderRadius: 24,
@@ -262,19 +267,19 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   label: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '600',
-    color: '#333',
+    color: '#2C1810',
     marginBottom: 8,
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#EDE0D4',
     borderRadius: 12,
-    padding: 16,
-    fontSize: 16,
-    color: '#333',
+    padding: 14,
+    fontSize: 15,
+    color: '#2C1810',
   },
   textArea: {
     height: 150,
@@ -282,59 +287,66 @@ const styles = StyleSheet.create({
   },
   charCount: {
     fontSize: 12,
-    color: '#999',
+    color: '#8B6E5A',
     textAlign: 'right',
     marginTop: 4,
   },
+  charCountWarning: {
+    color: '#C8360A',
+    fontWeight: '600',
+  },
   dateDisplay: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: '#EDE0D4',
     borderRadius: 12,
-    padding: 16,
+    padding: 14,
   },
   dateText: {
-    fontSize: 16,
-    color: '#333',
+    fontSize: 15,
+    color: '#4A3728',
   },
   walletInfo: {
-    backgroundColor: '#E3F2FD',
+    backgroundColor: '#FDF0E8',
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 10,
     marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#EDE0D4',
   },
   walletRow: {
     flexDirection: 'row',
     alignItems: 'center',
   },
   walletLabel: {
-    fontSize: 12,
-    color: '#1976D2',
-    marginBottom: 4,
+    fontSize: 11,
+    color: '#C8360A',
+    marginBottom: 3,
+    fontWeight: '500',
   },
   walletAddress: {
-    fontSize: 14,
+    fontSize: 13,
     fontFamily: Platform.OS === 'ios' ? 'Courier' : 'monospace',
-    color: '#1565C0',
+    color: '#2C1810',
   },
   switchButton: {
     marginLeft: 10,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    backgroundColor: '#fff',
-    borderRadius: 6,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#1976D2',
-    minWidth: 72,
+    borderColor: '#C8360A',
+    minWidth: 60,
     alignItems: 'center',
   },
   switchButtonText: {
     fontSize: 12,
-    color: '#1976D2',
+    color: '#C8360A',
     fontWeight: '600',
   },
   submitButton: {
-    backgroundColor: '#FF5722',
+    backgroundColor: '#C8360A',
     padding: 18,
     borderRadius: 12,
     alignItems: 'center',
@@ -352,18 +364,18 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 12,
     marginTop: 4,
-    opacity: 0.9,
+    opacity: 0.85,
   },
   notice: {
-    backgroundColor: '#FFF3E0',
+    backgroundColor: '#FDF0E8',
     padding: 12,
     borderRadius: 8,
     borderLeftWidth: 3,
-    borderLeftColor: '#FF9800',
+    borderLeftColor: '#C8360A',
   },
   noticeText: {
     fontSize: 12,
-    color: '#E65100',
+    color: '#8B4513',
     lineHeight: 18,
   },
 });
